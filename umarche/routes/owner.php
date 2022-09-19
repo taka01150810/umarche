@@ -24,12 +24,12 @@ use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('owner.welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('owner.dashboard');
+})->middleware(['auth:owners'])->name('dashboard');
 
 //auth.phpからコピー
 Route::middleware('guest')->group(function () {
