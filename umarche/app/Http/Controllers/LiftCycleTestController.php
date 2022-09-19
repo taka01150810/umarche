@@ -11,7 +11,11 @@ class LiftCycleTestController extends Controller
     {
         $encrypt = app()->make('encrypter');
         $password = $encrypt->encrypt('passwordです');
-        dd($password, $encrypt->decrypt($password));
+
+        $sample = app()->make('serviceProviderTest');
+        dd($sample);//結果 サービスプロバイダのテストです
+
+        // dd($password, $encrypt->decrypt($password));
         //結果 https://gyazo.com/2ce27a23c38a2c6a08d7a46b1ed42845
     }
 
