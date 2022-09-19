@@ -25,5 +25,35 @@ class LiftCycleTestController extends Controller
         $test = app()->make('lifeCycleTest');
         // dd($test);//結果 ライフサイクルテストです
 
+        //サービスコンテナなしのパターン
+        $message = new Message();
+        $sample = new Sample($message);
+        $sample->run(); //結果 サービスコンテナメッセージ表示
+
+        //サービスコンテナありのパターン -> インスタンス化する必要なし
+        app()->bind('sample', Sample::class);
+        $sample = app()->make('sample');
+        $sample->run();//結果 サービスコンテナメッセージ表示
+        
+    }
+}
+
+class Sample
+{
+    public $message;
+
+    public function __construct(Message $message){
+        $this->message = $message;
+    }
+
+    public function run(){
+        $this->message->send();
+    }
+}
+
+class Message
+{
+    public function send(){
+        echo('サービスコンテナメッセージ表示');
     }
 }
