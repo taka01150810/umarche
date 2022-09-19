@@ -8,4 +8,7 @@
     {{-- 結果 エラー -> 初期値を設定する必要がある--}}
 
     <x-tests.card title="タイトルです" />
+
+    <x-tests.card title="CSSを変更したい" class="bg-blue-300"/>
+    {{-- これだけではCSSは反映されない --}}
 </x-tests.app>
