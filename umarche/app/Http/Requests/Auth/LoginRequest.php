@@ -41,11 +41,20 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+    //ログインフォームに入力された値からパスワードを比較し、認証する。
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if($this->routeIs('owner.*')){
+            $guard = 'owners';
+        } elseif($this->routeIs('admin.*')){
+            $guard = 'admin';
+        } else {
+            $guard = 'users';
+        }
+
+        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
