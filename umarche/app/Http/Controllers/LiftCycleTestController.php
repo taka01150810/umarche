@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 class LiftCycleTestController extends Controller
 {
     //
+    public function showServiceProviderTest()
+    {
+        $encrypt = app()->make('encrypter');
+        $password = $encrypt->encrypt('passwordです');
+        dd($password, $encrypt->decrypt($password));
+        //結果 https://gyazo.com/2ce27a23c38a2c6a08d7a46b1ed42845
+    }
+
     public function showServiceContainerTest()
     {
         // dd(app());
