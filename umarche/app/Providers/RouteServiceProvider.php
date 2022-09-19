@@ -47,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
 
             Route::prefix('admin')//全てのルートURIの前にadminをつける
-            ->as('owner.')//as()で名前付きルートにもprefixつける
+            ->as('admin.')//as()で名前付きルートにもprefixつける
             ->middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin.php'));
