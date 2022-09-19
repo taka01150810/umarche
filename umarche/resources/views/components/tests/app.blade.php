@@ -20,6 +20,9 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
+        <header class="font-sans text-blue-900 antialiased">
+            {{ $header }}
+        </header>
         <div class="font-sans text-red-900 antialiased">
             {{ $slot }}
         </div>
