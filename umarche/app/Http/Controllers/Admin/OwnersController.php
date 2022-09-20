@@ -33,16 +33,18 @@ class OwnersController extends Controller
         $e_all = Owner::all();//返り値はEloquentCollection
 
         //クエリビルダ
-        $q_get = DB::table('owners')->select('name')->get();//返り値は Collection
-        $q_first = DB::table('owners')->select('name')->first();//返り値は stdClass
+        $q_get = DB::table('owners')->select('name', 'created_at')->get();//返り値は Collection
+        // $q_first = DB::table('owners')->select('name')->first();//返り値は stdClass
 
         //コレクション
-        $c_test = collect([
-            'name' => 'テスト',
-        ]);//返り値は Collection
+        // $c_test = collect([
+        //     'name' => 'テスト',
+        // ]);//返り値は Collection
 
-        dd($e_all, $q_get, $q_first, $c_test);
+        // dd($e_all, $q_get, $q_first, $c_test);
         //結果 https://gyazo.com/376f40d702d5e22307a7790765b97a91
+        return view('admin.owners.index',
+        compact('e_all', 'q_get'));
     }
 
     /**
