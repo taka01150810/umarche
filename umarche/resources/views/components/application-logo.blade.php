@@ -1,3 +1,2 @@
-<div class="w-28">
-    <img src="{{ asset("images/logo.png") }}">
-</div>
+{{-- コンポーネント側で設定しないとtailwindがバッティングする --}}
+<img src="{{ asset("images/logo.png") }}">
