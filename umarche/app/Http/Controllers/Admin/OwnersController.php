@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Owner;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OwnersController extends Controller
 {
@@ -24,6 +25,10 @@ class OwnersController extends Controller
      */
     public function index()
     {
+        $data_now = Carbon::now();
+        $data_parse = Carbon::parse(now());
+        echo $data_now;//結果 2022-09-20 20:01:24
+        echo $data_parse;//結果 2022-09-20 20:01:24
         //エロクアント
         $e_all = Owner::all();//返り値はEloquentCollection
 
