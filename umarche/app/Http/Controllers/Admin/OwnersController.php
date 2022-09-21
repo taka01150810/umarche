@@ -8,6 +8,9 @@ use App\Models\Owner;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
+use Illuminate\Support\Facades\Log;
+use App\Models\Shop;
 
 class OwnersController extends Controller
 {
@@ -61,11 +64,28 @@ class OwnersController extends Controller
             'password' => 'required|string|confirmed|min:8',
         ]);
 
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        //トランザクションでエラー時は例外発生
+        try{
+            DB::transaction(function() use ($request){
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
+
+                Shop::create([
+                    'owner_id' => $owner->id,
+                    'name' => '店名を入力してください',
+                    'information' => '',
+                    'filename' => '',
+                    'is_selling' => true,
+                ]);
+
+            }, 2);//NGの時に2回試す
+        }catch(Throwable $e){// PHP7からThrowableで例外取得
+            Log::error($e);//ログはstorage/logs/laravel.logファイル内に保存
+            throw $e;
+        }
 
         return redirect()
         ->route('admin.owners.index')
