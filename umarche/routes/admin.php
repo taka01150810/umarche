@@ -36,6 +36,12 @@ Route::get('/dashboard', function () {
 Route::resource('owners', OwnersController::class)
 ->middleware('auth:admin');
 
+Route::prefix('expired-owners')
+->middleware('auth:admin')->group(function(){
+    Route::get('index', [OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
+    Route::post('destroy/{owner}',[OwnersController::class, 'expiredOwnerDestroy'])->name('expired-owners.destroy');
+});
+
 //auth.phpからコピー
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
