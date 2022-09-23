@@ -15,3 +15,7 @@ App\Models\Owner::find(1)->shop->name;
 App\Models\Shop::find(1)->owner;
 App\Models\Shop::find(1)->owner->email;
 ->Shopに紐づくOwner情報を取得
+
+Vendorフォルダ内ファイルは更新がかかると上書きされてしまう可能性がある
+下記コマンドでresources/views/errorsに関連エラーファイル作成
+php artisan vendor:publish - ̶tag=laravel-errors
