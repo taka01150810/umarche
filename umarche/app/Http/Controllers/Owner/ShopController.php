@@ -13,6 +13,23 @@ class ShopController extends Controller
     public function __construct()
     {
         $this->middleware('auth:owners');
+
+        $this->middleware(function($request, $next){
+            // dd($request->route()->parameter('shop')); //結果 shopのid(文字列)
+            // dd(Auth::id()); //結果 shopのid(数字)
+
+            $id = $request->route()->parameter('shop'); //shopのid取得
+            if(!is_null($id)){ //$idがnullでなかったら
+                $shopsOwnerId = Shop::findOrFail($id)->owner->id;
+                $shopId = (int)$shopsOwnerId; // キャスト 文字列→数値に型変換
+                $ownerId = Auth::id();
+
+                if($shopId !== $ownerId){ // 同じでなかったら
+                    abort(404); //404画面表示
+                }
+            }
+            return $next($request);
+        });
     }
 
     public function index()
@@ -26,6 +43,8 @@ class ShopController extends Controller
 
     public function edit($id)
     {
+        // dd(Shop::findOrFail($id));
+        //結果 他のオーナーのShopが見れてしまう
 
     }
 
