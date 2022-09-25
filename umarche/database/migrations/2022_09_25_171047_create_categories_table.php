@@ -24,7 +24,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('sort_order');
-            $table->foreignId('primary_categories_id')
+            $table->foreignId('primary_category_id')//スペルミス
             ->constrained();
             $table->timestamps();
         });
