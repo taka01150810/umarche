@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
 
 class ImageController extends Controller
 {
@@ -66,8 +67,24 @@ class ImageController extends Controller
     public function store(UploadImageRequest $request)
     {
         //
-        dd($request);
-        //結果 https://gyazo.com/d69c7033021c0fc79de8d43a6c8d4bc1
+        $imageFiles = $request->file('files');//配列でファイルを取得
+
+        if(!is_null($imageFiles)){
+            foreach($imageFiles as $imageFile){
+                $fileNameToStore = ImageService::upload($imageFile, 'products');
+                Image::create([
+                    'owner_id' => Auth::id(),
+                    'filename' => $fileNameToStore
+                ]);
+            }
+        }
+
+        return redirect()
+        ->route('owner.images.index')
+        ->with([
+            'message' => '画像登録を実施しました',
+            'status' => 'info',
+        ]);
     }
 
     /**
