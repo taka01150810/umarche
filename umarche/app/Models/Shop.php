@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use APp\Models\Owner;
+use App\Models\Owner;//スペルミス
 use App\Models\Product;
 
 class Shop extends Model
