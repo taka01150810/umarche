@@ -30,6 +30,8 @@
                                 </div>
                             </div>
 
+                            <x-select-image name="image1"/>
+                            
                             <div class="p-2 w-full mt-4 flex justify-around">
                                 <button type="button" onclick="location.href='{{ route('owner.products.index') }}'" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
                                     戻る
