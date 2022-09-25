@@ -38,11 +38,25 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-        $products = Owner::findOrFail(Auth::id())->shop->product;
+        //SQLが商品画像の情報一つにつき一つ発行されてしまう(N+1問題)
+        //$products = Owner::findOrFail(Auth::id())->shop->product;
+
+        // Eager(積極的) Loading
+        $ownerInfo = Owner::with('shop.product.imageFirst')
+        ->where('id', Auth::id())
+        ->get();
+        // dd($ownerInfo);
+        
+        // foreach($ownerInfo as $owner){
+        //     // dd($owner->shop->product);
+        //     foreach($owner->shop->product as $product)
+        //     {
+        //         dd($product->imageFirst->filename);
+        //     }
+        // }
 
         return view('owner.products.index',
-        compact('products'));
+        compact('ownerInfo'));
     }
 
     /**
