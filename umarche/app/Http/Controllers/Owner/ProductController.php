@@ -139,7 +139,10 @@ class ProductController extends Controller
 
         return redirect()
         ->route('owner.products.index')
-        ->with('message', '商品登録を実施しました');
+        ->with([
+            'message' => '商品登録を実施しました',
+            'status' => 'info',
+        ]);
     }
 
     /**
