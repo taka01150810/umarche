@@ -219,6 +219,46 @@ class ProductController extends Controller
             ]);
         } else {
 
+            //ProductとStock同時更新するためトランザクションをかけておく
+            try{
+                DB::transaction(function() use ($request, $product){
+                    $product->name = $request->name;
+                    $product->information = $request->information;
+                    $product->price = $request->price;
+                    $product->sort_order = $request->sort_order;
+                    $product->shop_id = $request->shop_id;
+                    $product->secondary_category_id = $request->category;
+                    $product->image1 = $request->image1;
+                    $product->is_selling = $request->is_selling;
+                    $product->save();//保存処理
+    
+                    //在庫削減の場合はマイナスの数値を入れるため判定を追加
+                    if($request->type === '1'){//追加なら
+                        $newQuantity = $request->quantity;
+                    }
+                    
+                    if($request->type === '2'){//削減なら
+                        $newQuantity = $request->quantity * -1;
+                    }
+
+                    Stock::create([
+                        'product_id' => $product->id,
+                        'type' => $request->type,
+                        'quantity' => $newQuantity
+                    ]);
+    
+                }, 2);//NGの時に2回試す
+            }catch(Throwable $e){// PHP7からThrowableで例外取得
+                Log::error($e);//ログはstorage/logs/laravel.logファイル内に保存
+                throw $e;
+            }
+    
+            return redirect()
+            ->route('owner.products.index')
+            ->with([
+                'message' => '商品登録を更新しました',
+                'status' => 'info',
+            ]);
         }
 
     }
