@@ -197,6 +197,27 @@ class ProductController extends Controller
             'current_quantity' => 'required|integer',
         ]);
 
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        /*
+        画面表示後に在庫数が変わっている可能性がある
+        (Editとupdateの間でユーザーが購入した場合など)
+        在庫が同じか確認し違っていたらeditに戻す (楽観的ロック) 
+        */
+        if($request->current_quantity !== $quantity){
+            $id = $request->route()->parameter('product');
+            return redirect()
+            ->route('owner.products.edit', [ 'product' => $id ])
+            ->with([
+                'message' => '在庫数が変更されています。再度確認してください。',
+                'status' => 'alert',
+            ]);
+        } else {
+
+        }
+
     }
 
     /**

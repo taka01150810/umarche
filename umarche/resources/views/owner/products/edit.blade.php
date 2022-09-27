@@ -11,6 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{-- バリデーションエラー --}}
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <x-flash-message status="session('status')" />
                     <form method="post" action="{{ route('owner.products.update', ['product' => $product->id ]) }}">
                         @csrf
                         @method('put')
