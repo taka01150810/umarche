@@ -233,11 +233,11 @@ class ProductController extends Controller
                     $product->save();//保存処理
     
                     //在庫削減の場合はマイナスの数値を入れるため判定を追加
-                    if($request->type === '1'){//追加なら
+                    if($request->type === \Constant::PRODUCT_LIST['add']){//追加なら
                         $newQuantity = $request->quantity;
                     }
                     
-                    if($request->type === '2'){//削減なら
+                    if($request->type === \Constant::PRODUCT_LIST['reduce']){//削減なら
                         $newQuantity = $request->quantity * -1;
                     }
 
