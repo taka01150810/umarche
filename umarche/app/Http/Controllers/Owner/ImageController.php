@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
+use App\Models\Product;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
@@ -151,6 +152,28 @@ class ImageController extends Controller
     {
         //
         $image = Image::findOrFail($id);
+
+        /*
+        Productで選択しているImageを削除しようとすると外部キーエラー発生
+        画像を使っているか確認して
+        対策1. Product側で画像の選択を外してとメッセージを出す
+        対策2. Productのimage1をnullに変更
+        
+        今回は対策2で対応
+        */
+        // 削除したい画像をProductで使っているかの確認
+        $imageInProducts = Product::where('image1', $image->id)
+        ->get();
+
+        // 使っていたらimage1をチェックして nullに変更
+        if($imageInProducts){
+            $imageInProducts->each(function($product) use($image){
+                if($product->image1 === $image->id){
+                    $product->image1 = null;
+                    $product->save();
+                }
+            });
+        }
 
         //テーブル情報を削除する前にStorageフォルダ内画像ファイルを削除
         $filePath = 'public/products/' . $image->filename;
