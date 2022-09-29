@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
 // php artisan make:controller User/ItemController で作成
@@ -58,7 +59,15 @@ class ItemController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        return view('user.show', compact('product'));
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        if($quantity > 9){
+            $quantity = 9;
+        }
+
+        return view('user.show',
+        compact('product', 'quantity'));
     }
 
 }
