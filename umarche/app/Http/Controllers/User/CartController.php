@@ -6,11 +6,29 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;//ミスで前回のコミットで追加
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 // php artisan make:controller User/CartControllerで生成
 class CartController extends Controller
 {
     //
+
+    public function index()
+    {
+        $user = User::findOrFail(Auth::id());
+        $products = $user->products; //多対多のリレーション
+        $totalPrice = 0;
+        
+        foreach($products as $product){
+            $totalPrice += $product->price * $product->pivot->quantity;
+        }
+
+        dd($product, $totalPrice);
+
+        return view('user.cart.index',
+        compact('product', 'totalPrice'));
+    }
+
     public function add(Request $request)
     {
         $itemInCart = Cart::where('user_id', Auth::id())
@@ -27,7 +45,6 @@ class CartController extends Controller
                 'quantity' => $request->quantity
             ]);
         }
-
-        dd('テスト');
+        return redirect()->route('user.cart.index');
     }
 }
