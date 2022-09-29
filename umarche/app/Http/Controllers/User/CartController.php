@@ -23,10 +23,10 @@ class CartController extends Controller
             $totalPrice += $product->price * $product->pivot->quantity;
         }
 
-        dd($product, $totalPrice);
+        // dd($product, $totalPrice);
 
-        return view('user.cart.index',
-        compact('product', 'totalPrice'));
+        return view('user.cart',
+        compact('products', 'totalPrice'));
     }
 
     public function add(Request $request)
@@ -45,6 +45,6 @@ class CartController extends Controller
                 'quantity' => $request->quantity
             ]);
         }
-        return redirect()->route('user.cart.index');
+        return redirect()->route('user.cart');
     }
 }
