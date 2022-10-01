@@ -93,7 +93,7 @@ class CartController extends Controller
             ]);
         }
 
-        dd('test');
+        // dd('test');
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         
@@ -101,7 +101,7 @@ class CartController extends Controller
         
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],//カード払い
-            'lineItems' => [$lineItems],
+            'line_items' => [$lineItems],//スペルミス
             'mode' => 'payment',//1回払い
             'success_url' => route('user.items.index'),
             'cancel_url' => route('user.cart.index'),
@@ -109,7 +109,7 @@ class CartController extends Controller
 
         $publicKey = env('STRIPE_PUBLIC_KEY');
 
-        return vieww('user.checkout', 
+        return view('user.checkout', //viewスペルミス
         compact('session', 'publicKey'));
 
     }
