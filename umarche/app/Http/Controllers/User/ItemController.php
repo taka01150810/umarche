@@ -16,6 +16,18 @@ class ItemController extends Controller
     public function __construct()
     {
         $this->middleware('auth:users');
+
+        //販売中でない商品もURLを入力すると表示されるのでその対策
+        $this->middleware(function ($request, $next) {
+            $id = $request->route()->parameter('item');
+            if(!is_null($id)){
+                $itemId = Product::availableItems()->where('products.id', $id)->exists();
+                if(!$itemId){
+                    abort(404); // 404画面表示
+                }
+            }
+            return $next($request);
+        });
     }
 
     public function index(){
