@@ -36,3 +36,8 @@ storage/app/public/productsフォルダ内に
 storage/app/public/shopsフォルダを作成し
 画像を保存してください
 
+ワーカー(Worker 処理をする人)
+php artisan queue:work
+キューに入ったジョブを裏側で処理してくれる
+ワーカープロセスが常に動いている必要がある...監視しておく必要がある
+本番環境(Linux)の場合は supervisor で監視設定必要 
